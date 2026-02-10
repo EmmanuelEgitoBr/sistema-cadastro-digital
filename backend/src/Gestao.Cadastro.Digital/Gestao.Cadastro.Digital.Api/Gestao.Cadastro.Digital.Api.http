@@ -1,0 +1,6 @@
+@Gestao.Cadastro.Digital.Api_HostAddress = http://localhost:5131
+
+GET {{Gestao.Cadastro.Digital.Api_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
