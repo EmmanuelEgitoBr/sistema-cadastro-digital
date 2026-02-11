@@ -11,6 +11,4 @@ public class Funcionario
     public TipoFuncionario TipoFuncionario { get; set; }
     public DateTime DataAdmissao { get; set; }
     public DateTime DataDemissao { get; set; }
-    public PessoaFisica? DadosPessoaFisica { get; set; }
-    public PessoaJuridica? DadosPessoaJuridica { get; set; }
 }

@@ -21,6 +21,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao.Cadastro.Digital.Inf
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Worker", "Worker", "{DC17D405-BC7C-4910-8774-15B968AC584C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CrossCutting", "CrossCutting", "{E2612C6A-010F-4EE6-ACC8-B0953768E850}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao.Cadastro.Digital.CrossCutting", "Gestao.Cadastro.Digital.CrossCutting\Gestao.Cadastro.Digital.CrossCutting.csproj", "{5FEA2B8E-34EE-4044-B8C1-5A307516282F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,6 +47,10 @@ Global
 		{3B8CBC9E-AEBB-476C-B621-1D78DC7C57CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3B8CBC9E-AEBB-476C-B621-1D78DC7C57CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3B8CBC9E-AEBB-476C-B621-1D78DC7C57CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FEA2B8E-34EE-4044-B8C1-5A307516282F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FEA2B8E-34EE-4044-B8C1-5A307516282F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FEA2B8E-34EE-4044-B8C1-5A307516282F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FEA2B8E-34EE-4044-B8C1-5A307516282F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -52,6 +60,7 @@ Global
 		{8FBEB5DD-5E81-4741-AA83-6337A6351584} = {0F541414-7951-4374-B926-A6C65331CBA0}
 		{25F59E4E-36B3-4E81-A186-12785E42C06D} = {FD058A35-8B04-4A08-9EFA-B1BE15FD84D8}
 		{3B8CBC9E-AEBB-476C-B621-1D78DC7C57CF} = {0D0AA723-A4D3-455C-9F5F-77E4C8B67CCF}
+		{5FEA2B8E-34EE-4044-B8C1-5A307516282F} = {E2612C6A-010F-4EE6-ACC8-B0953768E850}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70E7041E-41CD-4291-86A0-9773176F1095}

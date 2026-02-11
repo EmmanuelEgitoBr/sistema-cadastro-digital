@@ -4,7 +4,7 @@ namespace Gestao.Cadastro.Digital.Domain.Entities.Base;
 
 public class Pessoa
 {
-    public long IdPessoa { get; set; }
+    public long IdPessoa { get; protected set; }
     public TipoPessoa TipoPessoa { get; set; }
     public CategoriaPessoa CategoriaPessoa { get; set; }
     public Contato ContatoPessoa { get; set; } = new Contato();
