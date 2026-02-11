@@ -29,6 +29,10 @@ public static class ServiceCollectionExtensions
         
         services.AddScoped(typeof(IRepository<>), typeof(RepositoryBase<>));
         services.AddScoped<IPessoaRepository, PessoaRepository>();
+        services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
+        services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
+        services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+        services.AddScoped<IContatoRepository, ContatoRepository>();
         services.AddScoped<IFuncionarioRepository, FuncionarioRepository>();
         services.AddScoped<IClienteRepository, ClienteRepository>();
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();

@@ -11,6 +11,8 @@ namespace Gestao.Cadastro.Digital.Infra.Sql.Context
         }
 
         public DbSet<Pessoa> Pessoas { get; set; }
+        public DbSet<Endereco> Enderecos { get; set; }
+        public DbSet<Contato> Contatos { get; set; }
         public DbSet<PessoaFisica> PessoasFisicas { get; set; }
         public DbSet<PessoaJuridica> PessoasJuridicas { get; set; }
         public DbSet<Funcionario> Funcionarios { get; set; }

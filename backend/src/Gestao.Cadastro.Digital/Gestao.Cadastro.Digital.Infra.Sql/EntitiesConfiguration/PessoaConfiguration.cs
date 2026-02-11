@@ -32,9 +32,5 @@ public class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
         builder.Property(x => x.DataInativacao)
             .HasColumnType("datetime2");
 
-        // Owned Types
-        builder.OwnsOne(x => x.ContatoPessoa);
-
-        builder.OwnsOne(x => x.EnderecoPessoa);
     }
 }

@@ -16,6 +16,18 @@ public class UnitOfWork : IUnitOfWork
     public IPessoaRepository Pessoas
         => new PessoaRepository(_context);
 
+    public IPessoaFisicaRepository PessoasFisicas
+        => new PessoaFisicaRepository(_context);
+
+    public IPessoaJuridicaRepository PessoasJuridicas
+        => new PessoaJuridicaRepository(_context);
+
+    public IContatoRepository Contatos
+        => new ContatoRepository(_context);
+
+    public IEnderecoRepository Enderecos
+        => new EnderecoRepository(_context);
+
     public IFuncionarioRepository Funcionarios
         => new FuncionarioRepository(_context);
 
