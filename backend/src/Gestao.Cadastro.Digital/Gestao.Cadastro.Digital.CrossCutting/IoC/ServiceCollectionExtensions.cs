@@ -1,4 +1,8 @@
-﻿using Gestao.Cadastro.Digital.Domain.Interfaces;
+﻿using FluentValidation;
+using Gestao.Cadastro.Digital.Application;
+using Gestao.Cadastro.Digital.Application.Interfaces;
+using Gestao.Cadastro.Digital.Application.Services;
+using Gestao.Cadastro.Digital.Domain.Interfaces;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Base;
 using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
 using Gestao.Cadastro.Digital.Infra.Sql.Context;
@@ -37,6 +41,24 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IClienteRepository, ClienteRepository>();
         services.AddScoped<IFornecedorRepository, FornecedorRepository>();
         
+        return services;
+    }
+
+    public static IServiceCollection AddApplicationServices(this IServiceCollection services)
+    {
+        services.AddScoped<IPessoaService, PessoaService>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddMediatorConfiguration(this IServiceCollection services)
+    {
+        services.AddMediatR(cfg =>
+        {
+            cfg.RegisterServicesFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
+        });
+        services.AddValidatorsFromAssembly(typeof(ApplicationAssemblyReference).Assembly);
+
         return services;
     }
 }

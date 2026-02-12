@@ -7,9 +7,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddDatabaseInfrastructure(builder.Configuration);
 builder.Services.AddRepositories();
+builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 
+builder.Services.AddMediatorConfiguration();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
