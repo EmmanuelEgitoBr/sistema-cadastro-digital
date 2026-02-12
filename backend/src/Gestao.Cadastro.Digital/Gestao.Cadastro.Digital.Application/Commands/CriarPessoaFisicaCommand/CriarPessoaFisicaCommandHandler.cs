@@ -12,8 +12,8 @@ public class CriarPessoaFisicaCommandHandler : IRequestHandler<CriarPessoaFisica
         _pessoaService = pessoaService;
     }
 
-    public Task<long> Handle(CriarPessoaFisicaCommand request, CancellationToken cancellationToken)
+    public async Task<long> Handle(CriarPessoaFisicaCommand request, CancellationToken cancellationToken)
     {
-        return _pessoaService.InserirPessoaFisicaAsync(request.PessoaFisicaDto);
+        return await _pessoaService.InserirPessoaFisicaAsync(request.PessoaFisicaDto);
     }
 }

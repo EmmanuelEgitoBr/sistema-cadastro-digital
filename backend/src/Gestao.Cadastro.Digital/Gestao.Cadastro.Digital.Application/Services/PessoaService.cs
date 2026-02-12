@@ -1,9 +1,8 @@
 ﻿using Gestao.Cadastro.Digital.Application.DTOs;
-using Gestao.Cadastro.Digital.Domain.Enums;
-using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
-using Gestao.Cadastro.Digital.Domain.Entities.Base;
 using Gestao.Cadastro.Digital.Application.Interfaces;
 using Gestao.Cadastro.Digital.Domain.Entities;
+using Gestao.Cadastro.Digital.Domain.Enums;
+using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
 
 namespace Gestao.Cadastro.Digital.Application.Services;
 
@@ -18,19 +17,13 @@ public class PessoaService : IPessoaService
 
     public async Task<long> InserirPessoaFisicaAsync(CriarPessoaFisicaDto pessoaFisicaDto)
     {
-        Pessoa pessoa = new Pessoa
+        PessoaFisica pessoaFisica = new PessoaFisica
         {
             TipoPessoa = TipoPessoa.Fisica,
             CategoriaPessoa = (CategoriaPessoa)pessoaFisicaDto.CategoriaPessoa,
             DataRegistro = DateTime.Now,
-            DataInativacao = null
-        };
+            DataInativacao = null,
 
-        var idPessoa = await CriarPessoaAsync(pessoa);
-
-        PessoaFisica pessoaFisica = new PessoaFisica
-        {
-            IdPessoa = idPessoa,
             NomePessoa = pessoaFisicaDto.NomePessoa,
             NomePai = pessoaFisicaDto.NomePai,
             NomeMae = pessoaFisicaDto.NomeMae,
@@ -47,22 +40,104 @@ public class PessoaService : IPessoaService
             DataNascimento = pessoaFisicaDto.DataNascimento
         };
 
-        await CriarPessoaFisicaAsync(pessoaFisica);
+        var idPessoa = await CriarPessoaFisicaAsync(pessoaFisica);
 
         return idPessoa;
     }
 
-    private async Task<long> CriarPessoaAsync(Pessoa pessoa)
+    public async Task<long> InserirPessoaJuridicaAsync(CriarPessoaJuridicaDto pessoaJuridicaDto)
     {
-        await _unitOfWork.Pessoas.AddAsync(pessoa);
-        await _unitOfWork.CommitAsync();
+        var cnpjSemMascara = new string(pessoaJuridicaDto.Cnpj!.Where(char.IsDigit).ToArray());
 
+        PessoaJuridica pessoaJuridica = new PessoaJuridica
+        {
+            TipoPessoa = TipoPessoa.Juridica,
+            CategoriaPessoa = (CategoriaPessoa)pessoaJuridicaDto.CategoriaPessoa,
+            DataRegistro = DateTime.Now,
+            DataInativacao = null,
+            NomeResponsavel = pessoaJuridicaDto.NomeResponsavel,
+            RazaoSocial = pessoaJuridicaDto.RazaoSocial,
+            NomeFantasia = pessoaJuridicaDto.NomeFantasia,
+            Cnpj = cnpjSemMascara,
+            InscricaoEstadual = pessoaJuridicaDto.InscricaoEstadual,
+            InscricaoMunicipal = pessoaJuridicaDto.InscricaoMunicipal,
+            DataFundacao = pessoaJuridicaDto.DataFundacao,
+            NaturezaJuridica = pessoaJuridicaDto.NaturezaJuridica,
+            Cnae = pessoaJuridicaDto.Cnae
+        };
+        
+        var idPessoa = await CriarPessoaJuridicaAsync(pessoaJuridica);
+
+        return idPessoa;
+    }
+
+    public async Task<long> InserirContatoPessoaAsync(CriarContatoDto contatoDto)
+    {
+        Contato contato = new Contato
+        {
+            IdPessoa = contatoDto.IdPessoa,
+            Email = contatoDto.Email,
+            Telefone = contatoDto.Telefone
+        };
+        await _unitOfWork.Contatos.AddAsync(contato);
+        await _unitOfWork.CommitAsync();
+        return contato.IdContato;
+    }
+
+    public async Task<long> InserirEnderecoPessoaAsync(CriarEnderecoDto enderecoDto)
+    {
+        Endereco endereco = new Endereco
+        {
+            IdPessoa = enderecoDto.IdPessoa,
+            Logradouro = enderecoDto.Logradouro,
+            Numero = enderecoDto.Numero,
+            Complemento = enderecoDto.Complemento,
+            Bairro = enderecoDto.Bairro,
+            Cidade = enderecoDto.Cidade,
+            Estado = enderecoDto.Estado,
+            Cep = enderecoDto.Cep
+        };
+        await _unitOfWork.Enderecos.AddAsync(endereco);
+        await _unitOfWork.CommitAsync();
+        return endereco.IdEndereco;
+    }
+
+    public async Task<long> InativarPessoaAsync(long idPessoa)
+    {
+        var pessoa = await _unitOfWork.Pessoas.GetByIdAsync(idPessoa);
+        if (pessoa == null)
+            throw new Exception("Pessoa não encontrada.");
+        
+        if (pessoa.DataInativacao != null)
+            throw new Exception("Pessoa já está inativa.");
+
+        pessoa.DataInativacao = DateTime.Now;
+        
+        _unitOfWork.Pessoas.Update(pessoa);
+        await _unitOfWork.CommitAsync();
+        
         return pessoa.IdPessoa;
     }
 
-    private async Task CriarPessoaFisicaAsync(PessoaFisica pessoaFisica)
+    #region Métodos privados
+
+    private async Task<long> CriarPessoaFisicaAsync(PessoaFisica pessoaFisica)
     {
         await _unitOfWork.PessoasFisicas.AddAsync(pessoaFisica);
         await _unitOfWork.CommitAsync();
+
+        return pessoaFisica.IdPessoa;
     }
+
+    private async Task<long> CriarPessoaJuridicaAsync(PessoaJuridica pessoaJuridica)
+    {
+        await _unitOfWork.PessoasJuridicas.AddAsync(pessoaJuridica);
+        await _unitOfWork.CommitAsync();
+
+        return pessoaJuridica.IdPessoa;
+    }
+
+    #endregion
+
+
 }
