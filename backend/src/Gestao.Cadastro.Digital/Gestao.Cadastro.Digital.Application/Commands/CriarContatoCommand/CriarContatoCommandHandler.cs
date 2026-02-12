@@ -1,19 +1,37 @@
 ﻿using Gestao.Cadastro.Digital.Application.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Logging;
 
 namespace Gestao.Cadastro.Digital.Application.Commands.CriarContatoCommand;
 
 public class CriarContatoCommandHandler : IRequestHandler<CriarContatoCommand, long>
 {
     private readonly IPessoaService _pessoaService;
+    private readonly ILogger<CriarContatoCommandHandler> _logger;
 
-    public CriarContatoCommandHandler(IPessoaService pessoaService)
+    public CriarContatoCommandHandler(IPessoaService pessoaService,
+        ILogger<CriarContatoCommandHandler> logger)
     {
         _pessoaService = pessoaService;
+        _logger = logger;
     }
 
     public async Task<long> Handle(CriarContatoCommand request, CancellationToken cancellationToken)
     {
-        return await _pessoaService.InserirContatoPessoaAsync(request.CriarContatoDto);
+        _logger.LogInformation("Iniciando criação de contato para pessoa com ID: {PessoaId}", request.CriarContatoDto.IdPessoa);
+
+        try
+        {
+            var idContato = await _pessoaService.InserirContatoPessoaAsync(request.CriarContatoDto);
+            _logger.LogInformation("Contato criado com sucesso para pessoa com ID: {PessoaId}, ID do contato: {ContatoId}",
+                request.CriarContatoDto.IdPessoa, idContato);
+            return idContato;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Erro ao criar contato para pessoa com ID: {PessoaId}",
+                request.CriarContatoDto.IdPessoa);
+            throw;
+        }
     }
 }

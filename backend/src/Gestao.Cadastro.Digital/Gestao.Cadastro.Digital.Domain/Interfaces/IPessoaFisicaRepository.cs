@@ -7,4 +7,5 @@ public interface IPessoaFisicaRepository : IRepository<PessoaFisica>
 {
     Task<PessoaFisica?> ObterPorPessoaAsync(long idPessoa);
     Task<PessoaFisica?> ObterPorCpfAsync(string cpf);
+    Task<bool> ExistsAsync(Func<PessoaFisica, bool> predicate);
 }

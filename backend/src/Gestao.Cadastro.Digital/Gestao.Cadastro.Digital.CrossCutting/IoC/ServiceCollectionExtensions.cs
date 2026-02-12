@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Gestao.Cadastro.Digital.Application;
+using Gestao.Cadastro.Digital.Application.Behaviors;
 using Gestao.Cadastro.Digital.Application.Interfaces;
 using Gestao.Cadastro.Digital.Application.Services;
 using Gestao.Cadastro.Digital.Domain.Interfaces;
@@ -9,6 +10,7 @@ using Gestao.Cadastro.Digital.Infra.Sql.Context;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories.Base;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories.UnitOfWork;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -47,6 +49,8 @@ public static class ServiceCollectionExtensions
     public static IServiceCollection AddApplicationServices(this IServiceCollection services)
     {
         services.AddScoped<IPessoaService, PessoaService>();
+
+        services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
         return services;
     }

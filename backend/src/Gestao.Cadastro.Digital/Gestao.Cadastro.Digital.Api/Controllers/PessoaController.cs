@@ -3,6 +3,9 @@ using Gestao.Cadastro.Digital.Application.Commands.CriarEnderecoCommand;
 using Gestao.Cadastro.Digital.Application.Commands.CriarPessoaFisicaCommand;
 using Gestao.Cadastro.Digital.Application.Commands.CriarPessoaJuridicaCommand;
 using Gestao.Cadastro.Digital.Application.Commands.InativarPessoaCommand;
+using Gestao.Cadastro.Digital.Application.DTOs.ApiResponse;
+using Gestao.Cadastro.Digital.Domain.Entities;
+using Gestao.Cadastro.Digital.Domain.Entities.Base;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -25,10 +28,14 @@ public class PessoaController : ControllerBase
     /// <param name="command"></param>
     /// <returns>O idPessoa gerado na criação</returns>
     [HttpPost("pessoa-fisica")]
+    [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CriarPessoaFisica([FromBody] CriarPessoaFisicaCommand command)
     {
         var idPessoa = await _mediator.Send(command);
-        return Created($"api/pessoa/{idPessoa}", new { idPessoa });
+        return Created($"api/pessoa/{idPessoa}",
+            ApiResponse<long>.Ok(idPessoa, "Pessoa física criada com sucesso"));
     }
 
     /// <summary>
@@ -37,10 +44,14 @@ public class PessoaController : ControllerBase
     /// <param name="command"></param>
     /// <returns>O Id da pessoa criada</returns>
     [HttpPost("pessoa-juridica")]
+    [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CriarPessoaJuridica([FromBody] CriarPessoaJuridicaCommand command)
     {
         var idPessoa = await _mediator.Send(command);
-        return Created($"api/pessoa/{idPessoa}", new { idPessoa });
+        return Created($"api/pessoa/{idPessoa}",
+            ApiResponse<long>.Ok(idPessoa, "Pessoa jurídica criada com sucesso"));
     }
 
     /// <summary>
@@ -49,10 +60,14 @@ public class PessoaController : ControllerBase
     /// <param name="command"></param>
     /// <returns>Id do contato criado</returns>
     [HttpPost("contato")]
+    [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CriarContato([FromBody] CriarContatoCommand command)
     {
         var idContato = await _mediator.Send(command);
-        return Created($"api/contato/{idContato}", new { idContato });
+        return Created($"api/contato/{idContato}",
+            ApiResponse<long>.Ok(idContato, "Contato criado com sucesso"));
     }
 
     /// <summary>
@@ -61,10 +76,14 @@ public class PessoaController : ControllerBase
     /// <param name="command"></param>
     /// <returns>Id do endereço criado</returns>
     [HttpPost("endereco")]
+    [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> CriarEndereco([FromBody] CriarEnderecoCommand command)
     {
         var idEndereco = await _mediator.Send(command);
-        return Created($"api/endereco/{idEndereco}", new { idEndereco });
+        return Created($"api/endereco/{idEndereco}",
+            ApiResponse<long>.Ok(idEndereco, "Endereço criado com sucesso"));
     }
 
     /// <summary>
@@ -73,9 +92,13 @@ public class PessoaController : ControllerBase
     /// <param name="idPessoa"></param>
     /// <returns></returns>
     [HttpPut("{idPessoa}/inativar")]
+    [ProducesResponseType(typeof(ApiResponse<long>), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(ApiResponse<object>), StatusCodes.Status500InternalServerError)]
     public async Task<IActionResult> InativarPessoa(long idPessoa)
     {
         var result = await _mediator.Send(new InativarPessoaCommand(idPessoa));
-        return Ok(new { IdPessoa = result, Message = "Pessoa inativada com sucesso." });
+        return Ok(ApiResponse<long>.Ok(result, "Pessoa inativada com sucesso"));
     }
 }

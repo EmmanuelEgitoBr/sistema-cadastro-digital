@@ -2,6 +2,7 @@
 using Gestao.Cadastro.Digital.Application.Interfaces;
 using Gestao.Cadastro.Digital.Domain.Entities;
 using Gestao.Cadastro.Digital.Domain.Enums;
+using Gestao.Cadastro.Digital.Domain.Exceptions;
 using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
 
 namespace Gestao.Cadastro.Digital.Application.Services;
@@ -17,6 +18,9 @@ public class PessoaService : IPessoaService
 
     public async Task<long> InserirPessoaFisicaAsync(CriarPessoaFisicaDto pessoaFisicaDto)
     {
+        if (await CpfExisteAsync(pessoaFisicaDto.Cpf!))
+            throw new DomainException("CPF já cadastrado.");
+
         PessoaFisica pessoaFisica = new PessoaFisica
         {
             TipoPessoa = TipoPessoa.Fisica,
@@ -48,6 +52,9 @@ public class PessoaService : IPessoaService
     public async Task<long> InserirPessoaJuridicaAsync(CriarPessoaJuridicaDto pessoaJuridicaDto)
     {
         var cnpjSemMascara = new string(pessoaJuridicaDto.Cnpj!.Where(char.IsDigit).ToArray());
+
+        if (await CnpjExisteAsync(cnpjSemMascara))
+            throw new DomainException("CNPJ já cadastrado.");
 
         PessoaJuridica pessoaJuridica = new PessoaJuridica
         {
@@ -120,6 +127,16 @@ public class PessoaService : IPessoaService
     }
 
     #region Métodos privados
+
+    private async Task<bool> CpfExisteAsync(string cpf)
+    {
+        return await _unitOfWork.PessoasFisicas.ExistsAsync(p => p.Cpf == cpf);
+    }
+
+    private async Task<bool> CnpjExisteAsync(string cnpj)
+    {
+        return await _unitOfWork.PessoasJuridicas.ExistsAsync(p => p.Cnpj == cnpj);
+    }
 
     private async Task<long> CriarPessoaFisicaAsync(PessoaFisica pessoaFisica)
     {

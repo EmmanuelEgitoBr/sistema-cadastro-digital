@@ -7,4 +7,5 @@ public interface IPessoaJuridicaRepository : IRepository<PessoaJuridica>
 {
     Task<PessoaJuridica?> ObterPorPessoaAsync(long idPessoa);
     Task<PessoaJuridica?> ObterPorCnpjAsync(string cnpj);
+    Task<bool> ExistsAsync(Func<PessoaJuridica, bool> predicate);
 }

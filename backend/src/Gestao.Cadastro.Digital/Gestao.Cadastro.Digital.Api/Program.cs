@@ -1,3 +1,4 @@
+using Gestao.Cadastro.Digital.Api.Middlewares;
 using Gestao.Cadastro.Digital.CrossCutting.IoC;
 using Microsoft.OpenApi;
 using System.Reflection;
@@ -42,6 +43,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthorization();
 

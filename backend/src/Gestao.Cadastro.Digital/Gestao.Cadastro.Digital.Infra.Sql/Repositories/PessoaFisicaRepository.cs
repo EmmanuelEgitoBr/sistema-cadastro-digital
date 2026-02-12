@@ -11,6 +11,11 @@ public class PessoaFisicaRepository : RepositoryBase<PessoaFisica>, IPessoaFisic
     public PessoaFisicaRepository(ApplicationDbContext context)
         : base(context) { }
 
+    public async Task<bool> ExistsAsync(Func<PessoaFisica, bool> predicate)
+    {
+        return await Task.FromResult(_context.PessoasFisicas.AsNoTracking().Any(predicate));
+    }
+
     public async Task<PessoaFisica?> ObterPorCpfAsync(string cpf)
     {
         return await _context.PessoasFisicas
