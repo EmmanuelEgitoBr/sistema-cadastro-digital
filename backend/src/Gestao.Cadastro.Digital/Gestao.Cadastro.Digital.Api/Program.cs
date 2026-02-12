@@ -1,6 +1,11 @@
 using Gestao.Cadastro.Digital.Api.Middlewares;
+using Gestao.Cadastro.Digital.Api.Services.Auth;
+using Gestao.Cadastro.Digital.Application.Interfaces.Auth;
 using Gestao.Cadastro.Digital.CrossCutting.IoC;
-using Microsoft.OpenApi;
+using Microsoft.OpenApi.Models;
+
+
+//using Microsoft.OpenApi;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -12,8 +17,11 @@ builder.Services.AddApplicationServices();
 
 builder.Services.AddControllers();
 
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+builder.Services.AddScoped<IPasswordHasher, BCryptPasswordHasherService>();
 builder.Services.AddMediatorConfiguration();
 builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddAuthenticationConfig(builder.Configuration);
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo
@@ -25,6 +33,30 @@ builder.Services.AddSwaggerGen(c =>
         {
             Name = "Time de Backend",
             Email = "backend@empresa.com"
+        }
+    });
+
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Bearer JWT",
+    });
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
         }
     });
 
@@ -46,6 +78,7 @@ app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

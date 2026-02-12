@@ -1,10 +1,11 @@
 ﻿using Gestao.Cadastro.Digital.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Command = Gestao.Cadastro.Digital.Application.Commands.InativarPessoaCommand;
 
-namespace Gestao.Cadastro.Digital.Application.Commands.InativarPessoaCommand;
+namespace Gestao.Cadastro.Digital.Application.Handlers.Commands.InativarPessoaCommand;
 
-public class InativarPessoaCommandHandler : IRequestHandler<InativarPessoaCommand, long>
+public class InativarPessoaCommandHandler : IRequestHandler<Command.InativarPessoaCommand, long>
 {
     private readonly IPessoaService _pessoaService;
     private readonly ILogger<InativarPessoaCommandHandler> _logger;
@@ -16,7 +17,7 @@ public class InativarPessoaCommandHandler : IRequestHandler<InativarPessoaComman
         _logger = logger;
     }
 
-    public async Task<long> Handle(InativarPessoaCommand request, CancellationToken cancellationToken)
+    public async Task<long> Handle(Command.InativarPessoaCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Iniciando processo de inativação da pessoa com ID: {IdPessoa}",
             request.IdPessoa);

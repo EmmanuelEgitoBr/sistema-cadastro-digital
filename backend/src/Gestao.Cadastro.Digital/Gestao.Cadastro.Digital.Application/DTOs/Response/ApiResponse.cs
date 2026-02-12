@@ -1,4 +1,4 @@
-﻿namespace Gestao.Cadastro.Digital.Application.DTOs.ApiResponse;
+﻿namespace Gestao.Cadastro.Digital.Application.DTOs.Response;
 
 public class ApiResponse<T>
 {

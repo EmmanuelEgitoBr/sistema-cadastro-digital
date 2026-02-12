@@ -3,7 +3,7 @@ using Gestao.Cadastro.Digital.Application.Commands.CriarEnderecoCommand;
 using Gestao.Cadastro.Digital.Application.Commands.CriarPessoaFisicaCommand;
 using Gestao.Cadastro.Digital.Application.Commands.CriarPessoaJuridicaCommand;
 using Gestao.Cadastro.Digital.Application.Commands.InativarPessoaCommand;
-using Gestao.Cadastro.Digital.Application.DTOs.ApiResponse;
+using Gestao.Cadastro.Digital.Application.DTOs.Response;
 using Gestao.Cadastro.Digital.Domain.Entities;
 using Gestao.Cadastro.Digital.Domain.Entities.Base;
 using MediatR;

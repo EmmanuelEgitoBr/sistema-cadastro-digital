@@ -1,4 +1,4 @@
-﻿using Gestao.Cadastro.Digital.Application.DTOs.ApiResponse;
+﻿using Gestao.Cadastro.Digital.Application.DTOs.Response;
 using Gestao.Cadastro.Digital.Domain.Exceptions;
 
 namespace Gestao.Cadastro.Digital.Api.Middlewares

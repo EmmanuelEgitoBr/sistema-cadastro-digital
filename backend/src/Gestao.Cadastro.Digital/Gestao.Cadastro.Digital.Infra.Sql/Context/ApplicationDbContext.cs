@@ -1,4 +1,5 @@
 ﻿using Gestao.Cadastro.Digital.Domain.Entities;
+using Gestao.Cadastro.Digital.Domain.Entities.Auth;
 using Gestao.Cadastro.Digital.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 
@@ -18,6 +19,8 @@ namespace Gestao.Cadastro.Digital.Infra.Sql.Context
         public DbSet<Funcionario> Funcionarios { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         public DbSet<Fornecedor> Fornecedores { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<RefreshToken> RefreshTokens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

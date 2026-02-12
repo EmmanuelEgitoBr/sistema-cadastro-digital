@@ -1,10 +1,11 @@
 ﻿using Gestao.Cadastro.Digital.Application.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Command = Gestao.Cadastro.Digital.Application.Commands.CriarPessoaFisicaCommand;
 
-namespace Gestao.Cadastro.Digital.Application.Commands.CriarPessoaFisicaCommand;
+namespace Gestao.Cadastro.Digital.Application.Handlers.Commands.CriarPessoaFisicaCommand;
 
-public class CriarPessoaFisicaCommandHandler : IRequestHandler<CriarPessoaFisicaCommand, long>
+public class CriarPessoaFisicaCommandHandler : IRequestHandler<Command.CriarPessoaFisicaCommand, long>
 {
     private readonly IPessoaService _pessoaService;
     private readonly ILogger<CriarPessoaFisicaCommandHandler> _logger;
@@ -16,7 +17,7 @@ public class CriarPessoaFisicaCommandHandler : IRequestHandler<CriarPessoaFisica
         _logger = logger;
     }
 
-    public async Task<long> Handle(CriarPessoaFisicaCommand request, CancellationToken cancellationToken)
+    public async Task<long> Handle(Command.CriarPessoaFisicaCommand request, CancellationToken cancellationToken)
     {
         _logger.LogInformation("Iniciando criação de pessoa física - CPF: {Cpf}", request.PessoaFisicaDto.Cpf);
 
