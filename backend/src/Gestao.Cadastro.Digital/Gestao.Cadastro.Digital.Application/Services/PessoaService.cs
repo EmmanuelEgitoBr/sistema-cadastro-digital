@@ -1,19 +1,24 @@
-﻿using Gestao.Cadastro.Digital.Application.DTOs;
+﻿using Gestao.Cadastro.Digital.Application.Contracts.Auditoria;
+using Gestao.Cadastro.Digital.Application.DTOs;
 using Gestao.Cadastro.Digital.Application.Interfaces;
+using Gestao.Cadastro.Digital.Domain.Constants;
 using Gestao.Cadastro.Digital.Domain.Entities;
 using Gestao.Cadastro.Digital.Domain.Enums;
 using Gestao.Cadastro.Digital.Domain.Exceptions;
 using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
+using Gestao.Cadastro.Digital.Infra.Messaging.Interfaces;
 
 namespace Gestao.Cadastro.Digital.Application.Services;
 
 public class PessoaService : IPessoaService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IRabbitMqEventPublisher _publiser;
 
-    public PessoaService(IUnitOfWork unitOfWork)
+    public PessoaService(IUnitOfWork unitOfWork, IRabbitMqEventPublisher publisher)
     {
         _unitOfWork = unitOfWork;
+        _publiser = publisher;
     }
 
     public async Task<long> InserirPessoaFisicaAsync(CriarPessoaFisicaDto pessoaFisicaDto)
@@ -43,6 +48,18 @@ public class PessoaService : IPessoaService
             Cpf = pessoaFisicaDto.Cpf,
             DataNascimento = pessoaFisicaDto.DataNascimento
         };
+
+        var blocoAuditoria = new AuditoriaContract
+        {
+            UsuarioId = 1,
+            Login = "eegito",
+            Acao = TipoAcao.Insercao,
+            Entidade = TipoEntidades.TabelaPessoaFisica,
+            DadosAntes = null,
+            DadosDepois = pessoaFisica
+        };
+
+        await _publiser.PublishAsync(blocoAuditoria, "auditoria-queue");
 
         var idPessoa = await CriarPessoaFisicaAsync(pessoaFisica);
 

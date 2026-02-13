@@ -46,60 +46,58 @@ public class RabbitMqPublisher : IRabbitMqEventPublisher
 
     public async Task PublishAsync<T>(T message, string queue)
     {
-        var factory = new ConnectionFactory
+        await _retryPolicy.ExecuteAsync(async () =>
         {
-            HostName = "localhost"
-        };
+            await using var channel = await _connection.CreateChannelAsync();
 
-        await using var connection = await factory.CreateConnectionAsync();
-        await using var channel = await connection.CreateChannelAsync();
+            await channel.QueueDeclareAsync(
+                queue: queue,
+                durable: true,
+                exclusive: false,
+                autoDelete: false);
 
-        await channel.QueueDeclareAsync(
-            queue: queue,
-            durable: true,
-            exclusive: false,
-            autoDelete: false,
-            arguments: null);
+            var body = Encoding.UTF8.GetBytes(
+                JsonSerializer.Serialize(message));
 
-        var body = Encoding.UTF8.GetBytes(JsonSerializer.Serialize(message));
+            var properties = new BasicProperties
+            {
+                Persistent = true
+            };
 
-        var properties = new BasicProperties
-        {
-            Persistent = true
-        };
+            var tcs = new TaskCompletionSource<bool>();
 
-        var tcs = new TaskCompletionSource<bool>();
+            channel.BasicAcksAsync += async (_, _) =>
+            {
+                tcs.TrySetResult(true);
+                await Task.CompletedTask;
+            };
 
-        channel.BasicAcksAsync += async (sender, ea) =>
-        {
-            tcs.TrySetResult(true);
-            await Task.CompletedTask;
-        };
+            channel.BasicNacksAsync += async (_, _) =>
+            {
+                tcs.TrySetException(
+                    new Exception("Mensagem NACK pelo broker"));
+                await Task.CompletedTask;
+            };
 
-        channel.BasicNacksAsync += async (sender, ea) =>
-        {
-            tcs.TrySetException(new Exception("Mensagem NÃO confirmada (NACK)"));
-            await Task.CompletedTask;
-        };
+            await channel.BasicPublishAsync(
+                exchange: "",
+                routingKey: queue,
+                mandatory: false,
+                basicProperties: properties,
+                body: body);
 
-        await channel.BasicPublishAsync<BasicProperties>(
-            exchange: "",
-            routingKey: queue,
-            mandatory: false,
-            basicProperties: properties,
-            body: body);
+            var completed = await Task.WhenAny(
+                tcs.Task,
+                Task.Delay(5_000));
 
-        var completedTask = await Task.WhenAny(
-            tcs.Task,
-            Task.Delay(TimeSpan.FromSeconds(5)));
+            if (completed != tcs.Task)
+                throw new TimeoutException("Timeout aguardando confirmação");
 
-        if (completedTask != tcs.Task)
-        {
-            throw new TimeoutException("Timeout aguardando confirmação do broker");
-        }
-
-        _logger.Information("Mensagem confirmada pelo RabbitMQ na fila {Queue}", queue);
+            _logger.Information(
+                "Mensagem confirmada na fila {Queue}", queue);
+        });
     }
+
 
     public async ValueTask DisposeAsync()
     {

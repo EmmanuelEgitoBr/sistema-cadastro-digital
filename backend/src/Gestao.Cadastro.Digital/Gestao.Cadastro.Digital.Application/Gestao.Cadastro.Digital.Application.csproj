@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Domain\Gestao.Cadastro.Digital.Domain.csproj" />
+    <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.Messaging\Gestao.Cadastro.Digital.Infra.Messaging.csproj" />
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.Sql\Gestao.Cadastro.Digital.Infra.Sql.csproj" />
   </ItemGroup>
 
