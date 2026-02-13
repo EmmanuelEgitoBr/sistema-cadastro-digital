@@ -1,12 +1,8 @@
-﻿using Gestao.Cadastro.Digital.Application.Interfaces.Auditoria;
+﻿using Gestao.Cadastro.Digital.Application.DTOs.Auditoria;
+using Gestao.Cadastro.Digital.Application.Interfaces.Auditoria;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Auditoria;
 using MongoDB.Bson;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Entity = Gestao.Cadastro.Digital.Domain.Entities.BlocoAuditoria;
 
 namespace Gestao.Cadastro.Digital.Application.Services.Auditoria;
 
@@ -19,27 +15,96 @@ public class AuditoriaService : IAuditoriaService
         _auditoriaRepository = auditoriaRepository;
     }
 
-    public async Task CriarRegistroAuditoriaAsync(Domain.Entities.BlocoAuditoria.Auditoria auditoria)
+    public async Task<string> CriarRegistroAuditoriaAsync(AuditoriaDto auditoria)
     {
-        await _auditoriaRepository.InsertAsync(auditoria);
+        var auditoriaEntity = new Entity.Auditoria
+        {
+            Id = ObjectId.GenerateNewId(),
+            Data = DateTime.Now,
+            UsuarioId = auditoria.UsuarioId,
+            Login = auditoria.Login,
+            Acao = auditoria.Acao,
+            Entidade = auditoria.Entidade,
+            DadosAntes = auditoria.DadosAntes,
+            DadosDepois = auditoria.DadosDepois
+        };
+
+        await _auditoriaRepository.InsertAsync(auditoriaEntity);
+        return auditoriaEntity.Id.ToString();
     }
 
-    public async Task<Domain.Entities.BlocoAuditoria.Auditoria> RetornarAuditoriaPorIdAsync(string auditoriaId)
+    public async Task<AuditoriaQueryDto?> RetornarAuditoriaPorIdAsync(string auditoriaId)
     {
         var id = ObjectId.Parse(auditoriaId);
-        var registro = await _auditoriaRepository.GetByIdAsync(id);
-        return registro!;
-    }
+        var auditoriaEntity = await _auditoriaRepository.GetByIdAsync(id);
 
-    public async Task<IEnumerable<Domain.Entities.BlocoAuditoria.Auditoria>> RetornarAuditoriaPorLoginAsync(string login)
-    {
-        var registros = await _auditoriaRepository.GetByNomeUsuarioAsync(login);
-        return registros;
+        if (auditoriaEntity == null) return null;
+
+        var auditoriaQuery = new AuditoriaQueryDto
+        {
+            Data = auditoriaEntity.Data,
+            UsuarioId = auditoriaEntity.UsuarioId,
+            Login = auditoriaEntity.Login,
+            Acao = auditoriaEntity.Acao,
+            Entidade = auditoriaEntity.Entidade,
+            DadosAntes = auditoriaEntity.DadosAntes,
+            DadosDepois = auditoriaEntity.DadosDepois
+        };
+
+        return auditoriaQuery!;
     }
 
     public async Task<IEnumerable<Domain.Entities.BlocoAuditoria.Auditoria>> RetornarAuditoriaPorUsuarioIdAsync(long usuarioId)
     {
         var registros = await _auditoriaRepository.GetByUsuarioIdAsync(usuarioId);
         return registros;
+    }
+
+    public async Task<IEnumerable<AuditoriaQueryDto>?> RetornarAuditoriaPorLoginAsync(string login)
+    {
+        var listaAuditoriasEntity = await _auditoriaRepository.GetByNomeUsuarioAsync(login);
+
+        if (listaAuditoriasEntity == null) return null;
+
+        var listaAuditorias = new List<AuditoriaQueryDto>();
+        foreach (var auditoriaEntity in listaAuditoriasEntity)
+        {
+            var auditoriaQuery = new AuditoriaQueryDto
+            {
+                Data = auditoriaEntity.Data,
+                UsuarioId = auditoriaEntity.UsuarioId,
+                Login = auditoriaEntity.Login,
+                Acao = auditoriaEntity.Acao,
+                Entidade = auditoriaEntity.Entidade,
+                DadosAntes = auditoriaEntity.DadosAntes,
+                DadosDepois = auditoriaEntity.DadosDepois
+            };
+            listaAuditorias.Add(auditoriaQuery);
+        }
+
+        return listaAuditorias;
+    }
+
+    async Task<IEnumerable<AuditoriaQueryDto>?> IAuditoriaService.RetornarAuditoriaPorUsuarioIdAsync(long usuarioId)
+    {
+        var listaAuditoriasEntity = await _auditoriaRepository.GetByUsuarioIdAsync(usuarioId);
+        if (listaAuditoriasEntity == null) return null;
+
+        var listaAuditorias = new List<AuditoriaQueryDto>();
+        foreach (var auditoriaEntity in listaAuditoriasEntity)
+        {
+            var auditoriaQuery = new AuditoriaQueryDto
+            {
+                Data = auditoriaEntity.Data,
+                UsuarioId = auditoriaEntity.UsuarioId,
+                Login = auditoriaEntity.Login,
+                Acao = auditoriaEntity.Acao,
+                Entidade = auditoriaEntity.Entidade,
+                DadosAntes = auditoriaEntity.DadosAntes,
+                DadosDepois = auditoriaEntity.DadosDepois
+            };
+            listaAuditorias.Add(auditoriaQuery);
+        }
+        return listaAuditorias;
     }
 }
