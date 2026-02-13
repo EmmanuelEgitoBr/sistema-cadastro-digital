@@ -1,5 +1,7 @@
 ﻿using Gestao.Cadastro.Digital.Application.Commands.Auth.LoginCommand;
 using Gestao.Cadastro.Digital.Application.Commands.Auth.RefreshTokenCommand;
+using Gestao.Cadastro.Digital.Application.Commands.Auth.RegistrarUsuarioCommand;
+using Gestao.Cadastro.Digital.Application.DTOs.Request;
 using Gestao.Cadastro.Digital.Application.DTOs.Response;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -58,6 +60,35 @@ namespace Gestao.Cadastro.Digital.Api.Controllers
                 Id = User.FindFirstValue(ClaimTypes.NameIdentifier),
                 Nome = User.Identity!.Name,
                 Email = User.FindFirstValue(ClaimTypes.Email)
+            });
+        }
+
+        /// <summary>
+        /// Endpoint para registrar um novo usuário.
+        /// </summary>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPost("register")]
+        [AllowAnonymous]
+        [ProducesResponseType(StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Register([FromBody] RegistrarUsuarioRequest request)
+        {
+            var command = new RegistrarUsuarioCommand(
+                request.Nome,
+                request.Email,
+                request.Cpf,
+                request.Login,
+                request.Senha,
+                request.Role
+            );
+
+            var userId = await _mediator.Send(command);
+
+            return CreatedAtAction(nameof(Register), new { id = userId }, new
+            {
+                id = userId,
+                message = "Usuário criado com sucesso"
             });
         }
     }

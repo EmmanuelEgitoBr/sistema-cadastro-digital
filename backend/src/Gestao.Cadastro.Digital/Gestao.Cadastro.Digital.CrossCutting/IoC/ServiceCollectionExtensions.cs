@@ -5,6 +5,7 @@ using Gestao.Cadastro.Digital.Application.Interfaces;
 using Gestao.Cadastro.Digital.Application.Interfaces.Auth;
 using Gestao.Cadastro.Digital.Application.Services;
 using Gestao.Cadastro.Digital.Application.Services.Auth;
+using Gestao.Cadastro.Digital.Domain.Constants;
 using Gestao.Cadastro.Digital.Domain.Interfaces;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Auth;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Base;
@@ -16,6 +17,7 @@ using Gestao.Cadastro.Digital.Infra.Sql.Repositories.Base;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories.UnitOfWork;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -99,8 +101,8 @@ public static class ServiceCollectionExtensions
             
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("Admin", policy => policy.RequireRole("Admin"));
-            options.AddPolicy("User", policy => policy.RequireRole("User"));
+            options.AddPolicy(Role.Admin, policy => policy.RequireRole(Role.Admin));
+            options.AddPolicy(Role.User, policy => policy.RequireRole(Role.User));
         });
 
         return services;
