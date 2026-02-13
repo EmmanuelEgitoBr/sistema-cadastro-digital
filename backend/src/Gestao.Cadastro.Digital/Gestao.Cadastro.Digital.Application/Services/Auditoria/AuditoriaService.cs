@@ -25,8 +25,7 @@ public class AuditoriaService : IAuditoriaService
             Login = auditoria.Login,
             Acao = auditoria.Acao,
             Entidade = auditoria.Entidade,
-            DadosAntes = auditoria.DadosAntes,
-            DadosDepois = auditoria.DadosDepois
+            ObjetoAuditoria = auditoria.ObjetoAuditoria
         };
 
         await _auditoriaRepository.InsertAsync(auditoriaEntity);
@@ -47,8 +46,7 @@ public class AuditoriaService : IAuditoriaService
             Login = auditoriaEntity.Login,
             Acao = auditoriaEntity.Acao,
             Entidade = auditoriaEntity.Entidade,
-            DadosAntes = auditoriaEntity.DadosAntes,
-            DadosDepois = auditoriaEntity.DadosDepois
+            ObjetoAuditoria = auditoriaEntity.ObjetoAuditoria
         };
 
         return auditoriaQuery!;
@@ -76,8 +74,7 @@ public class AuditoriaService : IAuditoriaService
                 Login = auditoriaEntity.Login,
                 Acao = auditoriaEntity.Acao,
                 Entidade = auditoriaEntity.Entidade,
-                DadosAntes = auditoriaEntity.DadosAntes,
-                DadosDepois = auditoriaEntity.DadosDepois
+                ObjetoAuditoria = auditoriaEntity.ObjetoAuditoria
             };
             listaAuditorias.Add(auditoriaQuery);
         }
@@ -100,8 +97,7 @@ public class AuditoriaService : IAuditoriaService
                 Login = auditoriaEntity.Login,
                 Acao = auditoriaEntity.Acao,
                 Entidade = auditoriaEntity.Entidade,
-                DadosAntes = auditoriaEntity.DadosAntes,
-                DadosDepois = auditoriaEntity.DadosDepois
+                ObjetoAuditoria = auditoriaEntity.ObjetoAuditoria
             };
             listaAuditorias.Add(auditoriaQuery);
         }

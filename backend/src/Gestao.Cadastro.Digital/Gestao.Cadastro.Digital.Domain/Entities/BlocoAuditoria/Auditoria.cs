@@ -12,6 +12,5 @@ public class Auditoria
     public string Login { get; set; } = string.Empty;
     public int Acao { get; set; }
     public string Entidade { get; set; } = string.Empty;  //Relacionada com a classe/tabela
-    public string? DadosAntes { get; set; }
-    public string? DadosDepois { get; set; }
+    public string? ObjetoAuditoria {  get; set; } = string.Empty;
 }
