@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace Gestao.Cadastro.Digital.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/auth")]
     [ApiController]
     public class AuthController : ControllerBase
     {

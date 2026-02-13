@@ -24,11 +24,11 @@ public class AuditoriaRepository : BaseRepository<Auditoria>,
             .ToListAsync();
     }
 
-    public async Task<IEnumerable<Auditoria>> GetByNomeUsuarioAsync(string nomeUsuario)
+    public async Task<IEnumerable<Auditoria>> GetByNomeUsuarioAsync(string login)
     {
         var filter = Builders<Auditoria>.Filter.Regex(
-            x => x.NomeUsuario,
-            new BsonRegularExpression(nomeUsuario, "i")
+            x => x.Login,
+            new BsonRegularExpression(login, "i")
         );
 
         return await _collection

@@ -6,5 +6,5 @@ namespace Gestao.Cadastro.Digital.Domain.Interfaces.Auditoria;
 public interface IAuditoriaRepository : IBaseRepository<Entidade.Auditoria>
 {
     Task<IEnumerable<Entidade.Auditoria>> GetByUsuarioIdAsync(long usuarioId);
-    Task<IEnumerable<Entidade.Auditoria>> GetByNomeUsuarioAsync(string nomeUsuario);
+    Task<IEnumerable<Entidade.Auditoria>> GetByNomeUsuarioAsync(string login);
 }

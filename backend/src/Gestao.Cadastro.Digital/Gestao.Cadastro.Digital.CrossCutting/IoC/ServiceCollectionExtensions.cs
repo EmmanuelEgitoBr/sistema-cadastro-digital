@@ -2,8 +2,10 @@
 using Gestao.Cadastro.Digital.Application;
 using Gestao.Cadastro.Digital.Application.Behaviors;
 using Gestao.Cadastro.Digital.Application.Interfaces;
+using Gestao.Cadastro.Digital.Application.Interfaces.Auditoria;
 using Gestao.Cadastro.Digital.Application.Interfaces.Auth;
 using Gestao.Cadastro.Digital.Application.Services;
+using Gestao.Cadastro.Digital.Application.Services.Auditoria;
 using Gestao.Cadastro.Digital.Application.Services.Auth;
 using Gestao.Cadastro.Digital.Domain.Constants;
 using Gestao.Cadastro.Digital.Domain.Interfaces;
@@ -64,6 +66,7 @@ public static class ServiceCollectionExtensions
     {
         services.AddScoped<IPessoaService, PessoaService>();
         services.AddScoped<IUsuarioService, UsuarioService>();
+        services.AddScoped<IAuditoriaService, AuditoriaService>();
 
         services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 

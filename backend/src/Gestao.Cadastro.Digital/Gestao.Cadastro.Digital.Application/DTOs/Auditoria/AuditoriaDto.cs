@@ -1,13 +1,7 @@
-﻿using MongoDB.Bson;
-using MongoDB.Bson.Serialization.Attributes;
+﻿namespace Gestao.Cadastro.Digital.Application.DTOs.Auditoria;
 
-namespace Gestao.Cadastro.Digital.Domain.Entities.BlocoAuditoria;
-
-public class Auditoria
+public class AuditoriaDto
 {
-    [BsonId]
-    public ObjectId Id { get; set; }
-    public DateTime Data { get; set; }
     public long UsuarioId { get; set; }
     public string Login { get; set; } = string.Empty;
     public string Acao { get; set; } = string.Empty;
