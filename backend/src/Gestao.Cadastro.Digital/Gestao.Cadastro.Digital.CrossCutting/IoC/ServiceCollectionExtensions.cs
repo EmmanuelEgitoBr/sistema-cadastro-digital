@@ -13,6 +13,10 @@ using Gestao.Cadastro.Digital.Domain.Interfaces.Auditoria;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Auth;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Base;
 using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
+using Gestao.Cadastro.Digital.Infra.Messaging.Configuration;
+using Gestao.Cadastro.Digital.Infra.Messaging.HealthChecks;
+using Gestao.Cadastro.Digital.Infra.Messaging.Interfaces;
+using Gestao.Cadastro.Digital.Infra.Messaging.Publishers;
 using Gestao.Cadastro.Digital.Infra.MongoDb.Configuration;
 using Gestao.Cadastro.Digital.Infra.MongoDb.Context;
 using Gestao.Cadastro.Digital.Infra.MongoDb.Repositories;
@@ -23,11 +27,12 @@ using Gestao.Cadastro.Digital.Infra.Sql.Repositories.Base;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories.UnitOfWork;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Serilog;
 using System.Text;
 
 namespace Gestao.Cadastro.Digital.CrossCutting.IoC;
@@ -115,11 +120,27 @@ public static class ServiceCollectionExtensions
         return services;
     }
 
-    public static IServiceCollection AddMongoConfiguration(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddMongoConfiguration(this IServiceCollection services, 
+        IConfiguration configuration)
     {
         services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
         services.AddSingleton<MongoDbContext>();
         services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
+        return services;
+    }
+
+    public static IServiceCollection AddMessagingConfiguration(this IServiceCollection services, 
+        IConfiguration configuration)
+    {
+        services.Configure<RabbitMqSettings>(configuration.GetSection("RabbitMq"));
+        services.AddSingleton<IRabbitMqEventPublisher, RabbitMqPublisher>();
+
+        return services;
+    }
+
+    public static IServiceCollection AddHealthChecksConfiguration(this IServiceCollection services)
+    {
+        services.AddHealthChecks().AddCheck<RabbitMqHealthCheck>("rabbitmq");
         return services;
     }
 }

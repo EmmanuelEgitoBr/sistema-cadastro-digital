@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao.Cadastro.Digital.Inf
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao.Cadastro.Digital.Worker.Auditoria", "Gestao.Cadastro.Digital.Worker.Auditoria\Gestao.Cadastro.Digital.Worker.Auditoria.csproj", "{88FCEA1F-6CC1-4381-B40E-5E01CAAB6FA9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Gestao.Cadastro.Digital.Infra.Messaging", "Gestao.Cadastro.Digital.Infra.Messaging\Gestao.Cadastro.Digital.Infra.Messaging.csproj", "{49E20038-ACAB-4257-855C-5C8F05EF2D04}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -63,6 +65,10 @@ Global
 		{88FCEA1F-6CC1-4381-B40E-5E01CAAB6FA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{88FCEA1F-6CC1-4381-B40E-5E01CAAB6FA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88FCEA1F-6CC1-4381-B40E-5E01CAAB6FA9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49E20038-ACAB-4257-855C-5C8F05EF2D04}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49E20038-ACAB-4257-855C-5C8F05EF2D04}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49E20038-ACAB-4257-855C-5C8F05EF2D04}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49E20038-ACAB-4257-855C-5C8F05EF2D04}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -75,6 +81,7 @@ Global
 		{5FEA2B8E-34EE-4044-B8C1-5A307516282F} = {E2612C6A-010F-4EE6-ACC8-B0953768E850}
 		{11190506-2AF5-4DF8-B7C0-862CB218C54E} = {0D0AA723-A4D3-455C-9F5F-77E4C8B67CCF}
 		{88FCEA1F-6CC1-4381-B40E-5E01CAAB6FA9} = {DC17D405-BC7C-4910-8774-15B968AC584C}
+		{49E20038-ACAB-4257-855C-5C8F05EF2D04} = {0D0AA723-A4D3-455C-9F5F-77E4C8B67CCF}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {70E7041E-41CD-4291-86A0-9773176F1095}

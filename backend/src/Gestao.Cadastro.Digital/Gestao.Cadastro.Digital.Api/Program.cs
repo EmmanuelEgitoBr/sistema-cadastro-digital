@@ -3,9 +3,7 @@ using Gestao.Cadastro.Digital.Api.Services.Auth;
 using Gestao.Cadastro.Digital.Application.Interfaces.Auth;
 using Gestao.Cadastro.Digital.CrossCutting.IoC;
 using Microsoft.OpenApi.Models;
-
-
-//using Microsoft.OpenApi;
+using Serilog;
 using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -15,6 +13,16 @@ builder.Services.AddDatabaseInfrastructure(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddApplicationServices();
 builder.Services.AddMongoConfiguration(builder.Configuration);
+builder.Services.AddMessagingConfiguration(builder.Configuration);
+builder.Services.AddHealthChecksConfiguration();
+builder.Host.UseSerilog((context, services, loggerConfig) =>
+{
+    loggerConfig
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services)
+        .Enrich.FromLogContext()
+        .WriteTo.Console();
+});
 
 builder.Services.AddControllers();
 
@@ -67,6 +75,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
+
+app.MapHealthChecks("/health");
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

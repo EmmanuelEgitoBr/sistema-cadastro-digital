@@ -14,11 +14,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.13" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.13" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.0" />
+    <PackageReference Include="Serilog" Version="4.3.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Application\Gestao.Cadastro.Digital.Application.csproj" />
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Domain\Gestao.Cadastro.Digital.Domain.csproj" />
+    <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.Messaging\Gestao.Cadastro.Digital.Infra.Messaging.csproj" />
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.MongoDb\Gestao.Cadastro.Digital.Infra.MongoDb.csproj" />
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.Sql\Gestao.Cadastro.Digital.Infra.Sql.csproj" />
   </ItemGroup>
