@@ -7,9 +7,13 @@ using Gestao.Cadastro.Digital.Application.Services;
 using Gestao.Cadastro.Digital.Application.Services.Auth;
 using Gestao.Cadastro.Digital.Domain.Constants;
 using Gestao.Cadastro.Digital.Domain.Interfaces;
+using Gestao.Cadastro.Digital.Domain.Interfaces.Auditoria;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Auth;
 using Gestao.Cadastro.Digital.Domain.Interfaces.Base;
 using Gestao.Cadastro.Digital.Domain.Interfaces.UnitOfWork;
+using Gestao.Cadastro.Digital.Infra.MongoDb.Configuration;
+using Gestao.Cadastro.Digital.Infra.MongoDb.Context;
+using Gestao.Cadastro.Digital.Infra.MongoDb.Repositories;
 using Gestao.Cadastro.Digital.Infra.Sql.Context;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories;
 using Gestao.Cadastro.Digital.Infra.Sql.Repositories.Auth;
@@ -105,6 +109,14 @@ public static class ServiceCollectionExtensions
             options.AddPolicy(Role.User, policy => policy.RequireRole(Role.User));
         });
 
+        return services;
+    }
+
+    public static IServiceCollection AddMongoConfiguration(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.Configure<MongoDbSettings>(configuration.GetSection("MongoDbSettings"));
+        services.AddSingleton<MongoDbContext>();
+        services.AddScoped<IAuditoriaRepository, AuditoriaRepository>();
         return services;
     }
 }

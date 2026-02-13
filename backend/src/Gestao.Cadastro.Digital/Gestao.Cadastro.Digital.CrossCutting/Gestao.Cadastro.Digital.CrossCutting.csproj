@@ -19,6 +19,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Application\Gestao.Cadastro.Digital.Application.csproj" />
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Domain\Gestao.Cadastro.Digital.Domain.csproj" />
+    <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.MongoDb\Gestao.Cadastro.Digital.Infra.MongoDb.csproj" />
     <ProjectReference Include="..\Gestao.Cadastro.Digital.Infra.Sql\Gestao.Cadastro.Digital.Infra.Sql.csproj" />
   </ItemGroup>
 

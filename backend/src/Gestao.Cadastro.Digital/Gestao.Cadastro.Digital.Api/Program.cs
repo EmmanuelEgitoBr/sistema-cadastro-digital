@@ -14,6 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDatabaseInfrastructure(builder.Configuration);
 builder.Services.AddRepositories();
 builder.Services.AddApplicationServices();
+builder.Services.AddMongoConfiguration(builder.Configuration);
 
 builder.Services.AddControllers();
 

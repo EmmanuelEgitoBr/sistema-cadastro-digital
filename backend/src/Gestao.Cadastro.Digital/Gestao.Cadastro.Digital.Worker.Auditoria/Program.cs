@@ -1,0 +1,7 @@
+using Gestao.Cadastro.Digital.Worker.Auditoria;
+
+var builder = Host.CreateApplicationBuilder(args);
+builder.Services.AddHostedService<Worker>();
+
+var host = builder.Build();
+host.Run();
