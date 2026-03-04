@@ -41,6 +41,21 @@ namespace Gestao.Cadastro.Digital.Worker.Auditoria
                 };
 
                 _connection = await factory.CreateConnectionAsync(stoppingToken);
+
+                while (_connection == null)
+                {
+                    try
+                    {
+                        _connection = await factory.CreateConnectionAsync(stoppingToken);
+                    }
+                    catch
+                    {
+                        await Task.Delay(5000);
+                    }
+                }
+
+
+
                 var channel = await _connection.CreateChannelAsync();
 
                 await channel.QueueDeclareAsync(
